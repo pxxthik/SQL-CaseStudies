@@ -127,3 +127,6 @@ SELECT *,round((((AVG_salary_2024-AVG_salary_2023)/AVG_salary_2023)*100),2)  AS 
 	MAX(CASE WHEN work_year = 2024 THEN average END) as AVG_salary_2024
 	FROM  t GROUP BY experience_level , job_title
 ) a WHERE (((AVG_salary_2024-AVG_salary_2023)/AVG_salary_2023)*100)  IS NOT NULL;
+
+
+-- 9. 
