@@ -129,4 +129,42 @@ SELECT *,round((((AVG_salary_2024-AVG_salary_2023)/AVG_salary_2023)*100),2)  AS 
 ) a WHERE (((AVG_salary_2024-AVG_salary_2023)/AVG_salary_2023)*100)  IS NOT NULL;
 
 
--- 9. 
+-- 9. You're a database administrator tasked with role-based access control for a company's employee database.
+--    Your goal is to implement a security measure where employees in different experience level
+--    (e.g. Entry Level, Senior level etc.) can only access details relevant to their respective experience level,
+--    ensuring data confidentiality and minimizing the risk of unauthorized access.
+
+SHOW PRIVILEGES;
+
+CREATE USER "Entry_Level"@"%" IDENTIFIED BY "EN";
+CREATE USER "Junior_Mid_Level"@"%" IDENTIFIED BY "MI";
+
+CREATE VIEW entry_level AS
+SELECT * FROM salaries WHERE experience_level = "EN";
+
+GRANT SELECT ON sql_casestudy.entry_level TO "Entry_Level"@"%";
+
+
+
+-- 10. You are working with a consultancy firm, your client comes to you with certain data and preferences
+--     such as (their year of experience , their employment type, company location and company size )  and want to
+--     make an transaction into different domain in data industry (like  a person is working as a data analyst and
+--     want to move to some other domain such as data science or data engineering etc.) your work is to  guide them to
+--     which domain they should switch to base on  the input they provided, so that they can now update their knowledge as
+--     per the suggestion/.. The Suggestion should be based on average salary.
+SELECT * FROM salaries
+DELIMITER //
+
+CREATE PROCEDURE GetAvgSal(IN exp_lvl VARCHAR(2), IN emp_type VARCHAR(3), IN cmp_loc VARCHAR(2), IN cmp_SIZE VARCHAR(2))
+BEGIN
+
+SELECT job_title, experience_level, employment_type, company_location, company_size, AVG(salary_in_usd) as avg_sal FROM salaries
+WHERE experience_level = exp_lvl AND employment_type = emp_type AND company_location = cmp_loc AND company_size = cmp_size
+GROUP BY experience_level, employment_type, company_location, company_size, job_title
+ORDER BY avg_sal DESC;
+
+END //
+
+DELIMITER ;
+
+call GetAvgSal('EN','FT','AU','M');
