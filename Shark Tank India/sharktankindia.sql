@@ -85,3 +85,28 @@ COUNT(CASE WHEN b.Accepted_Offer = "Yes" THEN b.Startup_Name END) AS "accepted"
 FROM valid_industries as a INNER JOIN sharktank as b
 ON a.Industry = b.Industry
 GROUP BY b.Season_Number, a.Industry;
+
+
+
+-- 6. Every shark wants to know in how much year their investment will be returned, so you must create a system for them,
+--    where shark will enter the name of the startup’s and the based on the total deal and equity given in how many years
+--    their principal amount will be returned and make their investment decisions.
+
+delimiter //
+CREATE PROCEDURE tot(IN startup VARCHAR(100))
+BEGIN
+	CASE
+		WHEN (SELECT Accepted_Offer = "No" FROM sharktank WHERE Startup_Name = startup)
+			THEN (SELECT "TOT cant be calculated as startup didnt accept the offer");
+		WHEN (SELECT Accepted_Offer = "Yes" AND Yearly_Revenue_in_lakhs = "Not Mentioned" FROM sharktank WHERE Startup_Name = startup)
+			THEN (SELECT "TOT cant be calculated as past data is not available");
+		ELSE
+			SELECT `Startup_Name`, `Yearly_Revenue_in_lakhs`, `Total_Deal_Amount_in_lakhs`, `Total_Deal_Equity_%`,
+            `Total_Deal_Amount_in_lakhs`/((`Total_Deal_Equity_%`/100)*`Total_Deal_Amount_in_lakhs`) as 'years'
+            FROM sharktank WHERE Startup_Name = startup;
+	END CASE;
+END
+
+// delimiter ;
+
+CALL tot('BluePineFoods');
