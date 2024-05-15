@@ -110,3 +110,77 @@ END
 // delimiter ;
 
 CALL tot('BluePineFoods');
+
+
+
+-- 7. In the world of startup investing, we're curious to know which big-name investor, often referred to as "sharks,"
+--    tends to put the most money into each deal on average. This comparison helps us see who's the most generous
+--    with their investments and how they measure up against their fellow investors.
+
+SELECT sharkname, ROUND(AVG(investment), 2) AS average FROM (
+	SELECT `Namita_Investment_Amount_in_lakhs` as investment, "Namita" as sharkname FROM sharktank
+	WHERE `Namita_Investment_Amount_in_lakhs` > 0
+	UNION ALL
+	SELECT `Vineeta_Investment_Amount_in_lakhs` as investment, "Vineeta" as sharkname FROM sharktank
+	WHERE `Vineeta_Investment_Amount_in_lakhs` > 0
+	UNION ALL
+	SELECT `Anupam_Investment_Amount_in_lakhs` as investment, "Anupam" as sharkname FROM sharktank
+	WHERE `Anupam_Investment_Amount_in_lakhs` > 0
+	UNION ALL
+	SELECT `Aman_Investment_Amount_in_lakhs` as investment, "Aman" as sharkname FROM sharktank
+	WHERE `Aman_Investment_Amount_in_lakhs` > 0
+	UNION ALL
+	SELECT `Peyush_Investment_Amount_in_lakhs` as investment, "Peyush" as sharkname FROM sharktank
+	WHERE `Peyush_Investment_Amount_in_lakhs` > 0
+	UNION ALL
+	SELECT `Ashneer_Investment_Amount` as investment, "Ashneer" as sharkname FROM sharktank
+	WHERE `Ashneer_Investment_Amount` > 0
+) t GROUP BY sharkname ORDER BY average DESC;
+
+
+
+-- 8. Develop a stored procedure that accepts inputs for the season number and the name of a shark. The procedure will
+--    then provide detailed insights into the total investment made by that specific shark across different industries
+--    during the specified season. Additionally, it will calculate the percentage of their investment in each sector
+--    relative to the total investment in that year, giving a comprehensive understanding of the shark's investment
+--    distribution and impact.
+
+DELIMITER //
+create PROCEDURE getseasoninvestment(IN season INT, IN sharkname VARCHAR(100))
+BEGIN
+      
+    CASE 
+
+        WHEN sharkname = 'namita' THEN
+            set @total = (select  sum(`Namita_Investment_Amount_in_lakhs`) from sharktank where Season_Number= season );
+            SELECT Industry, sum(`Namita_Investment_Amount_in_lakhs`) as 'sum' ,(sum(`Namita_Investment_Amount_in_lakhs`)/@total)*100 as 'Percent' FROM sharktank WHERE season_Number = season AND `Namita_Investment_Amount_in_lakhs` > 0
+            group by industry;
+        WHEN sharkname = 'Vineeta' THEN
+            SELECT industry,sum(`Vineeta_Investment_Amount_in_lakhs`) as 'sum' FROM sharktank WHERE season_Number = season AND `Vineeta_Investment_Amount_in_lakhs` > 0
+            group by industry;
+        WHEN sharkname = 'Anupam' THEN
+            SELECT industry,sum(`Anupam_Investment_Amount_in_lakhs`) as 'sum' FROM sharktank WHERE season_Number = season AND `Anupam_Investment_Amount_in_lakhs` > 0
+            group by Industry;
+        WHEN sharkname = 'Aman' THEN
+            SELECT industry,sum(`Aman_Investment_Amount_in_lakhs`) as 'sum'  FROM sharktank WHERE season_Number = season AND `Aman_Investment_Amount_in_lakhs` > 0
+             group by Industry;
+        WHEN sharkname = 'Peyush' THEN
+             SELECT industry,sum(`Peyush_Investment_Amount_in_lakhs`) as 'sum'  FROM sharktank WHERE season_Number = season AND `Peyush_Investment_Amount_in_lakhs` > 0
+             group by Industry;
+        WHEN sharkname = 'Amit' THEN
+              SELECT industry,sum(`Amit_Investment_Amount_in_lakhs`) as 'sum'   WHERE season_Number = season AND `Amit_Investment_Amount_in_lakhs` > 0
+             group by Industry;
+        WHEN sharkname = 'Ashneer' THEN
+            SELECT industry,sum(`Ashneer_Investment_Amount`)  FROM sharktank WHERE season_Number = season AND `Ashneer_Investment_Amount` > 0
+             group by Industry;
+        ELSE
+            SELECT 'Invalid shark name';
+    END CASE;
+    
+END //
+DELIMITER ;
+
+call getseasoninvestment(2, 'Namita');
+
+set @total = (select  sum(Total_Deal_Amount_in_lakhs) from sharktank where Season_Number= 1 );
+select @total;
