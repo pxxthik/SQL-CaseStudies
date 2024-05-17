@@ -184,3 +184,14 @@ call getseasoninvestment(2, 'Namita');
 
 set @total = (select  sum(Total_Deal_Amount_in_lakhs) from sharktank where Season_Number= 1 );
 select @total;
+
+
+-- 9. In the realm of venture capital, we're exploring which shark possesses the most diversified investment portfolio
+--    across various industries. By examining their investment patterns and preferences, we aim to uncover any discernible
+--    trends or strategies that may shed light on their decision-making processes and investment philosophies.
+
+
+-- 10. Explain the concept of indexes in MySQL. How do indexes improve query performance, and what factors should be
+--     considered when deciding which columns to index in a database table
+
+SELECT * FROM sharktank
