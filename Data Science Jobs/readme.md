@@ -2,6 +2,8 @@
 
 This repository contains the SQL queries and analysis conducted for a comprehensive case study on data science jobs. The case study encompasses various scenarios, each presenting unique challenges and objectives. Below is a summary of the scenarios tackled along with their corresponding SQL queries:
 
+![Data science jobs](datasciencejobs.jpg)
+
 1. **Identifying Countries with High-Paying Remote Managerial Positions**: Query to pinpoint countries offering fully remote managerial positions with salaries exceeding $90,000 USD.
 
 2. **Identifying Top Countries for Tech Startups Placement**: Query to identify the top 5 countries with the highest count of large tech firms, relevant for placing freshers.

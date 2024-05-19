@@ -4,6 +4,8 @@
 
 This repository contains a SQL case study focused on analyzing data from the Google Play Store. The dataset used for this analysis includes information about various mobile apps, including their categories, ratings, prices, and more.
 
+![Google Playstore](googleplaystore.jpg)
+
 ## Purpose
 
 The purpose of this case study is to demonstrate proficiency in SQL data analysis and problem-solving skills. Through a series of SQL queries and analyses, we aim to address several business questions and provide actionable insights for different stakeholders in the mobile app industry.
